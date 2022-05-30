@@ -138,7 +138,30 @@ public:
     if (equiv.empty()) {
       return false;
     }
-    o = equiv[gen_() % equiv.size()];
+    std::string opt_instr[5] = {"movq", "shrq", "andl", "addq", "retq"};
+    std::vector<int> index;
+    //std::cout << "FOR START" << std::endl;
+    for(int i=0; i < equiv.size(); i++){
+      for(int j=0; j < 5; j++){
+        if(opcode_write_att(equiv[i])==opt_instr[j]){
+          index.push_back(i);
+          //continue;
+        }
+      }
+    }
+    //std::cout << "FOR END" << std::endl;
+    if(index.size()>0){
+      //std::cout << "OPT EXIST" << std::endl;
+      o = equiv[index[gen_() % index.size()]];
+    }
+    else{
+      o = equiv[gen_() % equiv.size()];
+    }
+    //std::string s = opcode_write_intel(o);
+    //std::cout << s << std::endl;
+    //opcode_write_text(std::cout, o) << std::endl;
+    //std::cout << opcode_write_att(o) << std::endl;
+    
     return true;
   }
 
